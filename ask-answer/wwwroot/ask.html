@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title> 提问页面 </title>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/all.css"/>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container dropdown">
+        <a class="navbar-brand" href="#">智游教育</a>
+        <div class="navbar-text pull-right text-right">
+                    <span class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-user"></span> 姓名
+                    </span>
+            <ul class="dropdown-menu dropdown-menu-right">
+                <li><a class="text-right" href="user.html">个人资料</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a class="text-right" href="#">退出</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <form>
+        <div class="form-group">
+            <textarea name="content" class="form-control" rows="10" placeholder="请详细描述你的问题"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success form-control">提交问题</button>
+    </form>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">智游教育</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script>
+    $("form").submit(function (ev) {
+        ev.preventDefault();
+        var data = $("form").serialize();
+        console.log(data)
+//        $.post( paral,data,cb) paral--请求的路径； data--待发送的数据（键值对）； cb--回调函数 - 请求成功并且服务器有响应数据时执行的代码，类似于原生里请求状态发生改变时执行的事件； res--原生里指的是responseText，服务器返回的响应数据
+        $.post("/saveAsk",data, function (res) {
+            console.log(res);
+            if(res.code == 'success'){
+                $('.modal').modal('show')
+                $('.modal-body').html(res.message)
+                $('.btn-default').click(function () {
+                    location.href = '/'
+                })
+            }
+        })
+    })
+</script>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title> 问答系统首页 </title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <style>
+        .main{
+            overflow: hidden;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .main-left{
+            float: left;
+        }
+        .main img{
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: solid 5px #eee;
+            /*width: 100%;*/
+        }
+        .main-right{
+            float: left;
+            margin-right: 100px;
+        }
+        .main h4{
+            font-weight: bold;
+        }
+        .main>div p:last-of-type{
+            color: #666;
+        }
+        .answer{
+            overflow: hidden;
+        }
+        .ans-left{
+            /*width: 100px;*/
+            /*height: 100px;*/
+            /*border-radius: 50%;*/
+            /*border: solid 5px #eee;*/
+            float: right;
+        }
+        .ans-right{
+            float: right;
+        }
+        .answer img{
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: solid 5px #eee;
+            /*width: 100%;*/
+        }
+        .questions{
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container dropdown">
+        <a class="navbar-brand" href="/">智游教育</a>
+        <div class="navbar-text pull-right text-right">
+            <span id="ask" ><span class="glyphicon glyphicon-plus"></span> 提问</span>&#x3000;
+            <span id="user" class="dropdown-toggle" data-toggle="dropdown" >
+                <span class="glyphicon glyphicon-user"></span>
+                <span>登录</span>
+            </span>
+            <ul class="dropdown-menu dropdown-menu-right">
+                <li><a class="text-right" href="user.html">个人资料</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a class="text-right">退出</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container questions">
+    <div class="main">
+        <div class="main-left">
+            <img src="uploads/fafa.jpg" alt=""/>
+        </div>
+        <div class="main-right">
+            <h4> 提问者姓名 </h4>
+            <p> 提问的内容 </p>
+            <p> 1010-10-10 10:10 </p>
+        </div>
+    </div>
+    <div class="answer">
+        <div class="ans-left">
+            <img src="uploads/fafa.jpg" alt=""/>
+        </div>
+        <div class="ans-right">
+            <h4> 回答者姓名 </h4>
+            <p> 回答的内容 </p>
+            <p> 1010-10-10 10:10 </p>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    console.log($.cookie())
+    var username = $.cookie('username')
+    if( username ){
+        $("#user").find('span').last().text(username)
+    } else {
+        $("#user").removeAttr('data-toggle').find('span').last().click(function () {
+            location.href = 'login.html'
+        })
+    }
+    $('.dropdown-menu li').last().click(function () {
+        $.get('/user/signout',null, function (res) {
+            if( res.code == 'success'){
+                location.href = '/'
+            }
+        })
+    })
+//    如果存在登录用户名，可跳转到提问页面，否则，跳转到登录页面
+    $("#ask").click(function () {
+        if( username ){
+            location.href = 'ask.html'
+        } else {
+            location.href = 'login.html'
+        }
+    })
+
+//    if( $("#login").html(username) ){
+//        $("#user").attr("data-toggle","dropdown")
+//        $("#quit").click(function () {
+//            $.get('/user/signout',null, function (res) {
+//                if(res.code == 'success'){
+//                    location.href = '/'
+//                }
+//            })
+//        })
+//    }
+//    if( $("#login").html("登录") ){
+//            $("#login").click(function () {
+//                location.href = 'login.html'
+//            })
+//    }
+
+//    显示提问的问题
+    $.get('/questions',null, function (res) {
+        console.log(res)
+        var datas = res.questions
+        console.log(datas)
+        var divs = ''
+//        遍历取出所有的提问的内容
+        for( var i = 0; i < datas.length; i++ ){
+//            datas[i] 每个文件的内容 -- 文件的名称：按时间取名 new Date().getTime()
+            var times = datas[i].time
+            var fileName = new Date(times).getTime()
+            console.log(fileName)
+            divs += "<div class='main' questions='" + fileName + "' >"
+            divs += "<div class='main-left'>"
+            divs += "<img src='uploads/" + datas[i].username + ".jpg' />"
+            divs += "</div>"
+            divs += "<div class='main-right'>"
+            divs += "<h4>" + datas[i].username + "</h4>"
+            divs += "<p>" + datas[i].content + "</p>"
+            divs += "<p>" + datas[i].time + "</p>"
+            divs += "</div>"
+            divs += "</div>"
+        }
+        $(".questions").html(divs)
+
+        $(".main").click(function () {
+            console.log('111')
+//            设置某个cookie值，获取到当前点击文件的文件名称
+            $.cookie('questions', $(this).attr('questions') )
+            location.href = 'answer.html'
+        })
+    })
+//    显示回答的内容
+    $.get('/answer',null, function (res) {
+        console.log(res)
+        var datas = res.answers
+        console.log(datas)
+        var divs = ''
+//        遍历取出所有的提问的内容
+        for( var i = 0; i < datas.length; i++ ){
+//            datas[i] 每个文件的内容 -- 文件的名称：按时间取名 new Date().getTime()
+            var times = datas[i].time
+            var fileName = new Date(times).getTime()
+            console.log(fileName)
+            divs += "<div class='answer' questions='" + fileName + "' >"
+            divs += "<div class='ans-left'>"
+            divs += "<img src='uploads/" + datas[i].username + ".jpg' />"
+            divs += "</div>"
+            divs += "<div class='ans-right'>"
+            divs += "<h4>" + datas[i].username + "</h4>"
+            divs += "<p>" + datas[i].content + "</p>"
+            divs += "<p>" + datas[i].time + "</p>"
+            divs += "</div>"
+            divs += "</div>"
+        }
+        $(".questions").append(divs)
+    })
+
+
+
+</script>
+</html>

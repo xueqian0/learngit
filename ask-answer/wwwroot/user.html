@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title> 个人资料 </title>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/all.css"/>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-title">
+        <div class="container">
+            <div class="row">
+                <span id="goBack" class="glyphicon glyphicon-chevron-left pull-left"></span>
+                个人资料
+                <span id="register" class="glyphicon glyphicon-user pull-right invisible"></span>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <form action="/user/photo" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <input type="file" name="photo" required accept=".jpg,.png">
+        </div>
+        <input type="submit" class="btn btn-success form-control" value="上传头像"/>
+    </form>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">智游教育</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</html>

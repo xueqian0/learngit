@@ -1,0 +1,1 @@
+{"username":"as","pwd":"as1122","isMale":"true","email":"as@qq.com","course":"HTML5","ip":"::ffff:127.0.0.1","date":"2016-09-21T09:01:55.423Z"}

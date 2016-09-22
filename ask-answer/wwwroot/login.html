@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title> 登录页面 </title>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/all.css"/>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-title">
+                <span id="goBack" class="glyphicon glyphicon-chevron-left pull-left"></span>
+                登录
+                <span id="register" class="glyphicon glyphicon-plus-sign pull-right" onclick="location.href = 'register.html'"></span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <form action="/user/login" method="POST">
+        <div class="form-group">
+            <input type="text" name="username" class="form-control" required pattern="^[0-9a-zA-Z\u4e00-\u9fa5]{2,16}$" placeholder="请输入昵称">
+        </div>
+        <div class="form-group">
+            <input type="password" name="pwd" class="form-control" pattern="^.{6,16}$" required placeholder="请输入密码">
+        </div>
+        <input type="submit" class="btn btn-success form-control" value="登录"/>
+    </form>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">智游教育</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script>
+    $("form").submit(function (ev) {
+        ev.preventDefault()
+        var data = $(this).serialize()
+        $.post("/user/login",data, function (res) {
+            if(res.code == 'success'){
+                $('.modal').modal('show')
+                $('.modal-body').html(res.message)
+                $('.btn-default').click(function () {
+                    location.href = '/'
+                })
+            } else {
+                $('.modal').modal('show')
+                $('.modal-body').html(res.message)
+            }
+        })
+    })
+</script>
+</html>
